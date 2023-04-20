@@ -1,7 +1,7 @@
+import env from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import env from 'dotenv';
 import { Configuration, OpenAIApi } from 'openai';
 
 const app = express();
@@ -15,10 +15,10 @@ app.use(bodyParser.json());
 // Configure open api
 const configuration = new Configuration({
   organization: "org-ZBSvugSeJC2AWklw6VZnEetR",
-  apiKey: process.env.API_KEY
+  apiKey: process.env.REACT_APP_API_KEY
 });
 
-const openai = new OpenAIApi(Configuration);
+const openai = new OpenAIApi(configuration);
 
 // Listening
 app.listen("3080", () => console.log("Listening on port 3080"));
@@ -36,12 +36,12 @@ app.post('/', async (req, res) =>
   
   try {
     const response = await openai.createCompletion({
-      model: "text-devinci-003",
+      model: "text-davinci-003",
       prompt: `${message}`,
       max_tokens: 100,
       temperature: .5
     });
-    res.json({ message: response.data.choices[0].value });
+    res.json({ message: response.data.choices[0].text });
 
   } catch (error) {
     console.log(error);
